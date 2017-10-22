@@ -41,21 +41,6 @@
                         on_release: app.togglePause()
 
             Screen:
-                name: 'settings'
-                AnchorLayout:
-                    anchor_x: 'center'
-                    anchor_y: 'top'
-                    size_hint: .1, 1
-                    Button:
-                        text: 'Back'
-                        on_release:
-                            _screen_manager.current = _screen_manager.state
-                AnchorLayout:
-                    anchor_x: 'center'
-                    anchor_y: 'bottom'
-                    Label:
-                        text: 'Some settings'
-            Screen:
                 name: 'create_figurine'
                 BoxLayout:
                     orientation: 'vertical'
@@ -68,33 +53,3 @@
                         Button:
                             text: 'Save'
                             on_release: app.save_figurine()
-            Screen:
-                name: 'wifi'
-                AnchorLayout:
-                    anchor_x: 'center'
-                    anchor_y: 'top'
-                    size_hint: .1, 1
-                    Button:
-                        text: 'Back'
-                        on_release: _screen_manager.current = _screen_manager.state
-                AnchorLayout:
-                    anchor_x: 'center'
-                    anchor_y: 'bottom'
-                    ListView:
-                        id: wifi_networks
-    AnchorLayout:
-        anchor_x: 'center'
-        anchor_y: 'bottom'
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, .1
-            Button:
-                on_release: _screen_manager.current = 'settings'
-                Image:
-                    center: self.parent.center
-                    source: 'gfx/settings.png'
-            Button:
-                on_release: _screen_manager.current = 'wifi'
-                Image:
-                    center: self.parent.center
-                    source: 'gfx/no-connection.png'

@@ -8,7 +8,6 @@ import pika
 import json
 from thread import start_new_thread
 import time
-from wifi import Cell, Scheme
 import glob
 import os
 
@@ -30,8 +29,6 @@ class NightstandApp(App):
         self.main = Main()
         self.main.manager.state = 'main'
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
-        data = [{'text': str(i), 'is_selected': False} for i in range(100)]
-        #data = map(lambda cell: {'text': cell.ssid, 'is_selected': False}, Cell.all('wlan0'))
         data = map(lambda audio: {'text': os.path.basename(audio), 'is_selected': False}, glob.glob('data/audio/*'))
 
         args_converter = lambda row_index, rec: {'text': rec['text'],

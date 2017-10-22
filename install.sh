@@ -19,6 +19,6 @@ cd ..
 
 # brew install gst-plugins-bad gst-plugins-good
 sudo apt-get install -y python-kivy rabbitmq-server vlc
-sudo pip install pika wifi
+sudo pip install pika
 
 git clone https://github.com/mxgxw/MFRC522-python.git
