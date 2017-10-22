@@ -15,6 +15,7 @@ from message_queue import MessageQueue
 
 def send_event(uid, event):
     content = { "uid": uid, "event": event }
+    print(content)
     
     queue = MessageQueue()
     queue.send(content)
@@ -47,6 +48,9 @@ def read_rfid():
     
         # If no card is found
         if status != MIFAREReader.MI_OK and loops > loops_until_empty:
+            if len(last_uid) > 0:
+                send_event(last_uid, "figurine_removed")
+
             last_uid = ''
         
         # Get the UID of the card
@@ -61,8 +65,6 @@ def read_rfid():
                     continue
     
     	    last_uid = uid_str
-    	    print last_uid
-    
             send_event(uid_str, "figurine_added")
 
 if len(sys.argv) > 1:

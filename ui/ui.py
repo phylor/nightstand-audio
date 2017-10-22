@@ -54,11 +54,12 @@ class NightstandApp(App):
         new_position = self.main.ids.seek_slider.value
         self.player.seek(new_position)
 
-    def show_playing_screen(self):
+    def show_playing_screen(self, restart_playback=True):
         self.root.manager.current = 'playing'
         self.root.manager.state = 'playing'
 
-        self.player.play(self.figurine.get_audio_path())
+        if restart_playback:
+            self.player.play(self.figurine.get_audio_path())
 
     def show_create_figurine_screen(self):
         self.root.manager.current = 'create_figurine'
@@ -94,6 +95,7 @@ class NightstandApp(App):
     
         if message['event'] == 'figurine_added':
             if self.current_uid == message['uid']:
+                self.show_playing_screen(False)
                 self.player.resume()
             else:
                 self.figurine = Figurine(message['uid'])
