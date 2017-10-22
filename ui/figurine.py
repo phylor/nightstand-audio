@@ -23,3 +23,12 @@ class Figurine:
 
     def get_audio_path(self):
         return os.path.abspath(os.path.join(Figurine.audio_directory, self.data['audio_path']))
+
+    def exists(self):
+        return 'audio_path' in self.data
+
+    def save(self, audio_path):
+        self.data = {'uid': self.uid, 'audio_path': audio_path}
+
+        with open(self.file_path(), 'w') as figurine:
+            figurine.write(json.dumps(self.data))

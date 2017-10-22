@@ -56,6 +56,19 @@
                     Label:
                         text: 'Some settings'
             Screen:
+                name: 'create_figurine'
+                BoxLayout:
+                    orientation: 'vertical'
+                    ListView:
+                        id: audio_list
+                    BoxLayout:
+                        Button:
+                            text: 'Cancel'
+                            on_release: _screen_manager.current = _screen_manager.state
+                        Button:
+                            text: 'Save'
+                            on_release: app.save_figurine()
+            Screen:
                 name: 'wifi'
                 AnchorLayout:
                     anchor_x: 'center'

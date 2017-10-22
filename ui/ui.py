@@ -9,6 +9,8 @@ import json
 from thread import start_new_thread
 import time
 from wifi import Cell, Scheme
+import glob
+import os
 
 from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
@@ -30,17 +32,18 @@ class NightstandApp(App):
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
         data = [{'text': str(i), 'is_selected': False} for i in range(100)]
         #data = map(lambda cell: {'text': cell.ssid, 'is_selected': False}, Cell.all('wlan0'))
+        data = map(lambda audio: {'text': os.path.basename(audio), 'is_selected': False}, glob.glob('data/audio/*'))
 
         args_converter = lambda row_index, rec: {'text': rec['text'],
                                          'size_hint_y': None,
                                          'height': 75}
 
-        list_adapter = ListAdapter(data=data,
+        self.list_adapter = ListAdapter(data=data,
                            args_converter=args_converter,
                            cls=ListItemButton,
                            selection_mode='single',
                            allow_empty_selection=False)
-        self.main.ids.wifi_networks.adapter = list_adapter
+        self.main.ids.audio_list.adapter = self.list_adapter
 
 
         start_new_thread(self.update_seek_slider, ())
@@ -58,6 +61,11 @@ class NightstandApp(App):
         self.root.manager.current = 'playing'
         self.root.manager.state = 'playing'
 
+        self.player.play(self.figurine.get_audio_path())
+
+    def show_create_figurine_screen(self):
+        self.root.manager.current = 'create_figurine'
+
     def update_seek_slider(self):
         while True:
             if self.player.is_playing():
@@ -74,6 +82,14 @@ class NightstandApp(App):
             else:
                 self.player.resume()
 
+    def save_figurine(self):
+        selected_audio_path = self.list_adapter.selection[0].text
+
+        self.figurine = Figurine(self.current_uid)
+        self.figurine.save(selected_audio_path)
+
+        self.show_playing_screen()
+
     def message_received(self, channel, method, properties, body):
         message = json.loads(body)
         
@@ -81,15 +97,16 @@ class NightstandApp(App):
     
         if message['event'] == 'figurine_added':
             if self.current_uid == message['uid']:
-                print "resuming by adding figurine"
                 self.player.resume()
             else:
                 self.figurine = Figurine(message['uid'])
-                self.player.play(self.figurine.get_audio_path())
+
+                if self.figurine.exists():
+                    self.show_playing_screen()
+                else:
+                    self.show_create_figurine_screen()
 
             self.current_uid = message['uid']
-
-            self.show_playing_screen()
         elif message['event'] == 'figurine_removed':
             self.player.pause()
 
