@@ -1,3 +1,5 @@
 *.pyc
 data/audio/
 data/figurines/
+MFRC522-python/
+SPI-Py/

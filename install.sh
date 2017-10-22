@@ -17,8 +17,8 @@ cd SPI-Py
 sudo python setup.py install
 cd ..
 
-sudo apt-get install -y python-kivy rabbitmq-server
+# brew install gst-plugins-bad gst-plugins-good
+sudo apt-get install -y python-kivy rabbitmq-server vlc
 sudo pip install pika wifi
-brew install gst-plugins-bad gst-plugins-good
 
 git clone https://github.com/mxgxw/MFRC522-python.git

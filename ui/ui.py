@@ -12,20 +12,24 @@ from wifi import Cell, Scheme
 
 from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
+from figurine import Figurine
 
 class Main(FloatLayout):
     pass
 
 class NightstandApp(App):
+    def __init__(self):
+        super(NightstandApp, self).__init__()
+
+        self.player = AudioPlayer()
+        self.current_uid = None
 
     def build(self):
-        self.player = AudioPlayer()
-        
         self.main = Main()
         self.main.manager.state = 'main'
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
         data = [{'text': str(i), 'is_selected': False} for i in range(100)]
-        data = map(lambda cell: {'text': cell.ssid, 'is_selected': False}, Cell.all('en0'))
+        #data = map(lambda cell: {'text': cell.ssid, 'is_selected': False}, Cell.all('wlan0'))
 
         args_converter = lambda row_index, rec: {'text': rec['text'],
                                          'size_hint_y': None,
@@ -38,7 +42,6 @@ class NightstandApp(App):
                            allow_empty_selection=False)
         self.main.ids.wifi_networks.adapter = list_adapter
 
-        self.current_uid = None
 
         start_new_thread(self.update_seek_slider, ())
         
@@ -81,7 +84,8 @@ class NightstandApp(App):
                 print "resuming by adding figurine"
                 self.player.resume()
             else:
-                self.player.play_audio(message['uid'])
+                self.figurine = Figurine(message['uid'])
+                self.player.play(self.figurine.get_audio_path())
 
             self.current_uid = message['uid']
 

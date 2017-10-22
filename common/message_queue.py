@@ -16,7 +16,7 @@ class MessageQueue:
     def send(self, content):
         self.connect()
 
-        self.channel.basic_publish(exchange='',
+        self.connection.channel().basic_publish(exchange='',
                       routing_key='nightstand-audio',
                       body=json.dumps(content))
 
