@@ -6,9 +6,10 @@ import os
 # Set import path to MFRC522 library
 sys.path.append(os.path.abspath("./MFRC522-python"))
 
-import RPi.GPIO as GPIO
-import MFRC522
-import signal
+if sys.platform.startswith('linux'):
+    import RPi.GPIO as GPIO
+    import MFRC522
+    import signal
 
 sys.path.append(os.path.abspath("common"))
 from message_queue import MessageQueue

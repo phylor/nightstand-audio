@@ -3,6 +3,8 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.listview import ListItemButton
+from kivy.uix.screenmanager import NoTransition
+from kivy.config import Config
 
 import pika
 import json
@@ -10,10 +12,17 @@ from thread import start_new_thread
 import time
 import glob
 import os
+import sys
 
 from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
 from figurine import Figurine
+
+if sys.platform.startswith('linux'):
+    Config.set('graphics', 'fullscreen', 'auto')
+else:
+    Config.set('graphics', 'width', 800)
+    Config.set('graphics', 'height', 480)
 
 class Main(FloatLayout):
     pass
@@ -28,6 +37,7 @@ class NightstandApp(App):
     def build(self):
         self.main = Main()
         self.main.manager.state = 'main'
+        self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
         data = map(lambda audio: {'text': os.path.basename(audio), 'is_selected': False}, glob.glob('data/audio/*'))
 
