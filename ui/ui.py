@@ -16,6 +16,7 @@ import sys
 
 from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
+from big_label import BigLabel
 from figurine import Figurine
 
 if sys.platform.startswith('linux'):
@@ -80,6 +81,12 @@ class NightstandApp(App):
                 (position, length) = self.player.seek_information()
                 self.main.ids.seek_slider.range = (0, length)
                 self.main.ids.seek_slider.value = position
+
+                self.main.ids.play_pause_button.text = 'Pause'
+                self.main.ids.playing_label.text = 'Playing..'
+            else:
+                self.main.ids.play_pause_button.text = 'Play'
+                self.main.ids.playing_label.text = ''
 
             time.sleep(1)
 

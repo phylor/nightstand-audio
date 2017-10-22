@@ -1,4 +1,10 @@
 <Main>:
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
     manager: _screen_manager
     ScreenManager:
         id: _screen_manager
@@ -8,8 +14,10 @@
                 Image:
                     source: 'gfx/no-figurine.png'
                     size: 250, 250
-                Label: 
+                BigLabel: 
                     text: 'Place a figurine on top of the box'
+                    text_size: self.width, None
+                    size: self.texture_size
 
         Screen:
             name: 'playing'
@@ -20,9 +28,10 @@
                     Slider:
                         id: volume_slider
                         range: (0, 100)
-                        value: 25
+                        value: 100
                         step: 5
                     Button:
+                        id: play_pause_button
                         text: 'Play / Pause'
                         on_release: app.togglePause()
                 BoxLayout:
@@ -30,8 +39,11 @@
                     Image:
                         source: 'gfx/figurine.png'
                         size: 250, 250
-                    Label:
+                    BigLabel:
+                        id: playing_label
                         text: 'Playing..'
+                        text_size: self.width, None
+                        size: self.texture_size
                 ReleasableSlider:
                     size_hint: 1, .1
                     id: seek_slider
@@ -39,6 +51,8 @@
                     value: 0
                     step: 0.05
                     on_release: app.seek_to_user()
+                    value_track: True
+                    value_track_color: [0.15, 0.7, 0.9, 1]
 
         Screen:
             name: 'create_figurine'
