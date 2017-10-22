@@ -118,7 +118,11 @@ if __name__ == '__main__':
     connection_params = pika.ConnectionParameters('localhost')
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
-    
+
+    # we want to purge all old messages before we start:
+    # 1. we don't want to execute tons of old messages
+    # 2. there are issues when we start to execute messages before the UI has started
+    channel.queue_delete(queue='nightstand-audio')
     channel.queue_declare(queue='nightstand-audio')
     
     channel.basic_consume(app.message_received,
