@@ -6,6 +6,7 @@ from kivy.uix.listview import ListItemButton
 from kivy.uix.screenmanager import NoTransition
 from kivy.clock import Clock
 from kivy.config import Config
+from kivy.core.window import Window
 
 import pika
 import json
@@ -39,6 +40,20 @@ class NightstandApp(App):
         self.current_uid = None
 
         self.reader = RfidReader()
+
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == 'a':
+            self.message_received('123', 'figurine_added')
+        elif keycode[1] == 'r':
+            self.message_received('123', 'figurine_removed')
+        return True
 
     def build(self):
         self.main = Main()
