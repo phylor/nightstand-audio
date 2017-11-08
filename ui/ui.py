@@ -4,6 +4,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.listview import ListItemButton
 from kivy.uix.screenmanager import NoTransition
+from kivy.clock import Clock
 from kivy.config import Config
 
 import pika
@@ -18,6 +19,8 @@ from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
 from big_label import BigLabel
 from figurine import Figurine
+sys.path.append(os.path.abspath("./rfid_reader"))
+from reader import RfidReader
 
 if sys.platform.startswith('linux'):
     Config.set('graphics', 'fullscreen', 'auto')
@@ -129,23 +132,15 @@ class NightstandApp(App):
             self.root.manager.current = 'main'
             self.root.manager.state = 'main'
 
+def check_rfid_reader(delta_time):
+    RfidReader().read_rfid(rfid_callback)
+
+def rfid_callback(uid, action):
+    print uid, action
+
 if __name__ == '__main__':
     app = NightstandApp()
 
-    connection_params = pika.ConnectionParameters('localhost')
-    connection = pika.BlockingConnection(connection_params)
-    channel = connection.channel()
-
-    # we want to purge all old messages before we start:
-    # 1. we don't want to execute tons of old messages
-    # 2. there are issues when we start to execute messages before the UI has started
-    channel.queue_delete(queue='nightstand-audio')
-    channel.queue_declare(queue='nightstand-audio')
-    
-    channel.basic_consume(app.message_received,
-                          queue='nightstand-audio',
-                          no_ack=True)
-    
-    start_new_thread(channel.start_consuming, ())
+    Clock.schedule_interval(check_rfid_reader, 1 / 2.)
 
     app.run()
