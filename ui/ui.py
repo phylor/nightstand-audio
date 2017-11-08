@@ -50,9 +50,9 @@ class NightstandApp(App):
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if keycode[1] == 'a':
-            self.message_received('123', 'figurine_added')
+            self.message_received('1234', 'figurine_added')
         elif keycode[1] == 'r':
-            self.message_received('123', 'figurine_removed')
+            self.message_received('1234', 'figurine_removed')
         return True
 
     def build(self):
@@ -64,7 +64,7 @@ class NightstandApp(App):
 
         args_converter = lambda row_index, rec: {'text': rec['text'],
                                          'size_hint_y': None,
-                                         'height': 75}
+                                         'height': 75, 'font_size': 40}
 
         self.list_adapter = ListAdapter(data=data,
                            args_converter=args_converter,
@@ -120,7 +120,7 @@ class NightstandApp(App):
     def save_figurine(self):
         selected_audio_path = self.list_adapter.selection[0].text
 
-        self.figurine = Figurine(self.current_uid)
+        self.figurine = Figurine(self.current_uid or self.requested_uid)
         self.figurine.save(selected_audio_path)
 
         self.show_playing_screen()
@@ -139,6 +139,9 @@ class NightstandApp(App):
                     self.show_playing_screen()
                 else:
                     self.show_create_figurine_screen()
+                    self.requested_uid = uid
+                    # We must not set the current_uid here, as otherwise the cancel button on the 'Add figurine' screen does not work
+                    return
 
             self.current_uid = uid
         elif action == 'figurine_removed':
@@ -146,6 +149,7 @@ class NightstandApp(App):
 
             self.root.manager.current = 'main'
             self.root.manager.state = 'main'
+            self.current_uid = None
 
 
     def check_rfid_reader(self, delta_time):
