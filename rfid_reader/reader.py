@@ -25,6 +25,7 @@ class RfidReader():
         self.MIFAREReader = MFRC522.MFRC522()
         
         self.last_uid = ''
+        self.loops = 0
         
     # Capture SIGINT for cleanup when the script is aborted
     def end_read(self, signal, frame):
