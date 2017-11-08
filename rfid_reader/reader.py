@@ -34,6 +34,8 @@ class RfidReader():
         sys.exit(0)
     
     def read_rfid(self, callback):
+        self.loops = self.loops + 1
+
         # Scan for cards    
         (status,TagType) = self.MIFAREReader.MFRC522_Request(self.MIFAREReader.PICC_REQIDL)
         

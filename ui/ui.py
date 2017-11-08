@@ -38,6 +38,8 @@ class NightstandApp(App):
         self.player = AudioPlayer()
         self.current_uid = None
 
+        self.reader = RfidReader()
+
     def build(self):
         self.main = Main()
         self.main.manager.state = 'main'
@@ -108,39 +110,35 @@ class NightstandApp(App):
 
         self.show_playing_screen()
 
-    def message_received(self, channel, method, properties, body):
-        message = json.loads(body)
-        
-        print message['uid'] + ' / ' + message['event']
+    def message_received(self, uid, action):
+        print uid + ' / ' + action
     
-        if message['event'] == 'figurine_added':
-            if self.current_uid == message['uid']:
+        if action == 'figurine_added':
+            if self.current_uid == uid:
                 self.show_playing_screen(False)
                 self.player.resume()
             else:
-                self.figurine = Figurine(message['uid'])
+                self.figurine = Figurine(uid)
 
                 if self.figurine.exists():
                     self.show_playing_screen()
                 else:
                     self.show_create_figurine_screen()
 
-            self.current_uid = message['uid']
-        elif message['event'] == 'figurine_removed':
+            self.current_uid = uid
+        elif action == 'figurine_removed':
             self.player.pause()
 
             self.root.manager.current = 'main'
             self.root.manager.state = 'main'
 
-def check_rfid_reader(delta_time):
-    RfidReader().read_rfid(rfid_callback)
 
-def rfid_callback(uid, action):
-    print uid, action
+    def check_rfid_reader(self, delta_time):
+        self.reader.read_rfid(self.message_received)
 
 if __name__ == '__main__':
     app = NightstandApp()
 
-    Clock.schedule_interval(check_rfid_reader, 1 / 2.)
+    Clock.schedule_interval(app.check_rfid_reader, 1 / 2.)
 
     app.run()
