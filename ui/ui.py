@@ -1,8 +1,6 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
-from kivy.adapters.listadapter import ListAdapter
-from kivy.uix.listview import ListItemButton
 from kivy.uix.screenmanager import NoTransition
 from kivy.clock import Clock
 from kivy.config import Config
@@ -23,6 +21,7 @@ from big_label import BigLabel
 from figurine import Figurine
 sys.path.append(os.path.abspath("./rfid_reader"))
 from reader import RfidReader
+from audio_list_adapter import AudioListAdapter
 
 if sys.platform.startswith('linux'):
     Config.set('graphics', 'fullscreen', 'auto')
@@ -67,24 +66,8 @@ class NightstandApp(App):
         self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
 
-        file_types = ('*.mp3', '*.wav', '*.ogg')
-        audio_files = []
-        for files in file_types:
-            audio_files.extend(glob.glob(os.path.join(self.configuration['data_directory'], 'audio/**/' + files)))
-
-        data = map(lambda audio: {'text': os.path.relpath(audio, os.path.join(self.configuration['data_directory'], 'audio')), 'is_selected': False}, audio_files)
-
-        args_converter = lambda row_index, rec: {'text': rec['text'],
-                                         'size_hint_y': None,
-                                         'height': 75, 'font_size': 40}
-
-        self.list_adapter = ListAdapter(data=data,
-                           args_converter=args_converter,
-                           cls=ListItemButton,
-                           selection_mode='single',
-                           allow_empty_selection=False)
+        self.list_adapter = AudioListAdapter(self.configuration['data_directory'])
         self.main.ids.audio_list.adapter = self.list_adapter
-
 
         start_new_thread(self.update_seek_slider, ())
         
