@@ -24,6 +24,10 @@ sudo apt-get install -y vlc libyaml-dev
 sudo pip install pyyaml
 
 git clone https://github.com/lthiery/SPI-Py.git
-PWD=$PWD/SPI-Py sudo python setup.py install
+cd SPI-Py
+sudo python setup.py install
+cd ..
 
 git clone https://github.com/mxgxw/MFRC522-python.git
+
+cp configuration.yaml.sample configuration.yaml
