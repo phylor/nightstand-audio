@@ -68,16 +68,23 @@
                         text: 'Playing..'
                         text_size: self.width, None
                         size: self.texture_size
-                ReleasableSlider:
+                BoxLayout:
                     size_hint: 1, .1
-                    id: seek_slider
-                    range: (0, 1)
-                    value: 0
-                    step: 0.05
-                    on_release: app.seek_to_user()
-                    value_track: True
-                    value_track_color: [0.15, 0.7, 0.9, 1]
-                    cursor_size: (100, 100)
+                    ReleasableSlider:
+                        id: seek_slider
+                        size_hint: .9, 1
+                        range: (0, 1)
+                        value: 0
+                        step: 0.05
+                        on_release: app.seek_to_user()
+                        value_track: True
+                        value_track_color: [0.15, 0.7, 0.9, 1]
+                        cursor_size: (100, 100)
+                    Label:
+                        id: seek_time
+                        size_hint: .1, 1
+                        text: ''
+                        font_size: 40
 
         Screen:
             name: 'create_figurine'

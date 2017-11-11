@@ -136,16 +136,23 @@ class NightstandApp(App):
 
     def update_seek_slider(self):
         while True:
-            if self.player.is_playing():
-                (position, length) = self.player.seek_information()
-                self.main.ids.seek_slider.range = (0, length)
-                self.main.ids.seek_slider.value = position
+            (position, length) = self.player.seek_information()
 
+            self.main.ids.seek_slider.range = (0, length)
+            self.main.ids.seek_slider.value = position
+
+            self.main.ids.seek_time.text = str(self.player.remaining())
+
+            if self.player.is_playing():
                 self.main.ids.play_pause_button.text = 'Pause'
                 self.main.ids.playing_label.text = 'Playing..'
             else:
-                self.main.ids.play_pause_button.text = 'Play'
-                self.main.ids.playing_label.text = ''
+                if position >= 0.99 * length:
+                    self.main.ids.play_pause_button.text = 'Replay'
+                    self.main.ids.playing_label.text = ''
+                else:
+                    self.main.ids.play_pause_button.text = 'Play'
+                    self.main.ids.playing_label.text = ''
 
             time.sleep(1)
 
@@ -154,7 +161,12 @@ class NightstandApp(App):
             if self.player.is_playing():
                 self.player.pause()
             else:
-                self.player.resume()
+                (position, length) = self.player.seek_information()
+
+                if position >= 0.99 * length:
+                    self.player.replay()
+                else:
+                    self.player.resume()
 
     def save_figurine(self):
         data = self.main.ids.audio_list.selection
