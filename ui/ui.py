@@ -28,7 +28,6 @@ from big_label import BigLabel
 from figurine import Figurine
 sys.path.append(os.path.abspath("./rfid_reader"))
 from reader import RfidReader
-from audio_list_adapter import AudioListAdapter
 from audio_list import AudioList
 
 if sys.platform.startswith('linux'):
@@ -82,10 +81,6 @@ class NightstandApp(App):
 
         self.reader = RfidReader()
 
-        if not sys.platform.startswith('linux'):
-            self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-            self._keyboard.bind(on_key_down=self._on_keyboard_down)
-
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
@@ -103,14 +98,19 @@ class NightstandApp(App):
         self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
 
-        #self.list_adapter = AudioListAdapter(self.configuration['data_directory'])
-        #self.main.ids.audio_list.adapter = self.list_adapter
         self.main.ids.audio_list.audio_directory = os.path.join(self.configuration['data_directory'], 'audio')
         self.main.ids.audio_list.show_all()
 
         start_new_thread(self.update_seek_slider, ())
+
+        self.initialize_debug_keyboard()
         
         return self.main
+
+    def initialize_debug_keyboard(self):
+        if not sys.platform.startswith('linux'):
+            self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+            self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
     def on_volume_slider_change(self, instance, value):
         self.player.set_volume(value)
@@ -164,6 +164,7 @@ class NightstandApp(App):
         self.figurine.save(selected_audio_path)
 
         self.show_playing_screen()
+        self.initialize_debug_keyboard()
 
     def delete_figurine(self):
         if self.player is not None and self.player.is_playing():
