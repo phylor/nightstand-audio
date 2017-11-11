@@ -2,6 +2,7 @@ from kivy.uix.recycleview import RecycleView
 
 import os
 import glob
+import json
 
 class AudioList(RecycleView):
     def __init__(self, **kwargs):
