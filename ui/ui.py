@@ -15,6 +15,7 @@ import time
 import glob
 import os
 import sys
+import yaml
 
 from audio_player import AudioPlayer
 from releasable_slider import ReleasableSlider
@@ -35,6 +36,10 @@ class Main(FloatLayout):
 class NightstandApp(App):
     def __init__(self):
         super(NightstandApp, self).__init__()
+
+        with open('configuration.yaml', 'r') as config:
+            data = config.read()
+            self.configuration = yaml.load(data)
 
         self.player = AudioPlayer()
         self.current_uid = None
@@ -61,7 +66,13 @@ class NightstandApp(App):
         self.main.manager.state = 'main'
         self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
-        data = map(lambda audio: {'text': os.path.basename(audio), 'is_selected': False}, glob.glob('data/audio/*'))
+
+        file_types = ('*.mp3', '*.wav', '*.ogg')
+        audio_files = []
+        for files in file_types:
+            audio_files.extend(glob.glob(os.path.join(self.configuration['data_directory'], 'audio/**/' + files)))
+
+        data = map(lambda audio: {'text': os.path.relpath(audio, os.path.join(self.configuration['data_directory'], 'audio')), 'is_selected': False}, audio_files)
 
         args_converter = lambda row_index, rec: {'text': rec['text'],
                                          'size_hint_y': None,
@@ -121,7 +132,7 @@ class NightstandApp(App):
     def save_figurine(self):
         selected_audio_path = self.list_adapter.selection[0].text
 
-        self.figurine = Figurine(self.current_uid or self.requested_uid)
+        self.figurine = Figurine(self.current_uid or self.requested_uid, self.configuration['data_directory'])
         self.figurine.save(selected_audio_path)
 
         self.show_playing_screen()
@@ -134,7 +145,7 @@ class NightstandApp(App):
                 self.show_playing_screen(False)
                 self.player.resume()
             else:
-                self.figurine = Figurine(uid)
+                self.figurine = Figurine(uid, self.configuration['data_directory'])
 
                 if self.figurine.exists():
                     self.show_playing_screen()

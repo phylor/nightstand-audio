@@ -4,3 +4,4 @@ data/figurines/
 MFRC522-python/
 SPI-Py/
 audio/
+configuration.yaml

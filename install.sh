@@ -20,7 +20,8 @@ sudo pip install -U Cython==0.27.3
 sudo pip install git+https://github.com/kivy/kivy.git@master
 
 # Custom dependencies required by our own code
-sudo apt-get install -y vlc
+sudo apt-get install -y vlc libyaml-dev
+sudo pip install pyyaml
 
 git clone https://github.com/lthiery/SPI-Py.git
 PWD=$PWD/SPI-Py sudo python setup.py install
