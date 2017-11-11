@@ -11,6 +11,10 @@ class AudioList(RecycleView):
         audio_files = self.files()
         self.data = map(lambda audio: { 'name': os.path.basename(audio), 'directory': os.path.relpath(os.path.dirname(audio), self.audio_directory) }, audio_files)
 
+    def show_unused(self):
+        audio_files = self.unused_files()
+        self.data = map(lambda audio: { 'name': os.path.basename(audio), 'directory': os.path.relpath(os.path.dirname(audio), self.audio_directory) }, audio_files)
+
     def files(self):
         file_types = ('*.mp3', '*.wav', '*.ogg')
         audio_files = []
@@ -22,3 +26,18 @@ class AudioList(RecycleView):
 
     def set_selection(self, data):
         self.selection = data
+
+    def used_files(self):
+        files = []
+
+        for json_file in glob.glob(os.path.join(self.data_directory, 'figurines', '*.json')):
+            with open(json_file, 'r') as json_data:
+                files.append(json.loads(json_data).audio_path)
+
+        return files
+
+    def unused_files(self):
+        all_files = set(self.files())
+        used_files = set(self.used_files())
+
+        return [item for item in all_files if item not in used_files]

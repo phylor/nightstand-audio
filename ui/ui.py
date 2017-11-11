@@ -98,6 +98,7 @@ class NightstandApp(App):
         self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
 
+        self.main.ids.audio_list.data_directory = self.configuration['data_directory']
         self.main.ids.audio_list.audio_directory = os.path.join(self.configuration['data_directory'], 'audio')
         self.main.ids.audio_list.show_all()
 

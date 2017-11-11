@@ -90,6 +90,17 @@
             name: 'create_figurine'
             BoxLayout:
                 orientation: 'vertical'
+                BoxLayout:
+                    size_hint: 1, .1
+                    ToggleButton:
+                        text: 'Show all'
+                        group: 'audio_list_filter'
+                        state: 'down'
+                        on_release: audio_list.show_all()
+                    ToggleButton:
+                        text: 'Show unused'
+                        group: 'audio_list_filter'
+                        on_release: audio_list.show_unused()
                 AudioList:
                     id: audio_list
                     #size_hint: 1, .9
