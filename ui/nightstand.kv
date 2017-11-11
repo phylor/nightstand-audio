@@ -35,7 +35,11 @@
                     Button:
                         id: play_pause_button
                         text: 'Play / Pause'
-                        on_release: app.togglePause()
+                        on_release: app.toggle_pause()
+                        font_size: 40
+                    Button:
+                        text: 'Delete'
+                        on_release: app.delete_figurine()
                         font_size: 40
                 BoxLayout:
                     size_hint: 1, .8

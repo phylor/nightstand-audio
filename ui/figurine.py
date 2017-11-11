@@ -33,3 +33,6 @@ class Figurine:
 
         with open(self.file_path(), 'w') as figurine:
             figurine.write(json.dumps(self.data))
+
+    def delete(self):
+        os.remove(self.file_path())

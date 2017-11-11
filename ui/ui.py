@@ -107,6 +107,11 @@ class NightstandApp(App):
     def show_create_figurine_screen(self):
         self.root.manager.current = 'create_figurine'
 
+    def show_main_screen(self):
+        self.root.manager.current = 'main'
+        self.root.manager.state = 'main'
+        self.current_uid = None
+
     def update_seek_slider(self):
         while True:
             if self.player.is_playing():
@@ -122,7 +127,7 @@ class NightstandApp(App):
 
             time.sleep(1)
 
-    def togglePause(self):
+    def toggle_pause(self):
         if self.player is not None:
             if self.player.is_playing():
                 self.player.pause()
@@ -136,6 +141,13 @@ class NightstandApp(App):
         self.figurine.save(selected_audio_path)
 
         self.show_playing_screen()
+
+    def delete_figurine(self):
+        if self.player is not None and self.player.is_playing():
+            self.player.pause()
+
+        self.figurine.delete()
+        self.show_main_screen()
 
     def message_received(self, uid, action):
         print uid + ' / ' + action
@@ -159,10 +171,7 @@ class NightstandApp(App):
         elif action == 'figurine_removed':
             self.player.pause()
 
-            self.root.manager.current = 'main'
-            self.root.manager.state = 'main'
-            self.current_uid = None
-
+            self.show_main_screen()
 
     def check_rfid_reader(self, delta_time):
         self.reader.read_rfid(self.message_received)
