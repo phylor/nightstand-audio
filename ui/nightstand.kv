@@ -1,3 +1,20 @@
+<SelectableLabel>:
+    canvas.before:
+        Color:
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    name: ''
+    directory: ''
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: root.name
+            font_size: 40
+        Label:
+            text: root.directory
+
 <Main>:
     canvas.before:
         Color:
@@ -66,9 +83,20 @@
             name: 'create_figurine'
             BoxLayout:
                 orientation: 'vertical'
-                ListView:
+                AudioList:
                     id: audio_list
-                    size_hint: 1, .9
+                    #size_hint: 1, .9
+                    scroll_type: ['bars', 'content']
+                    scroll_wheel_distance: dp(114)
+                    bar_width: dp(40)
+                    viewclass: 'SelectableLabel'
+                    SelectableRecycleBoxLayout:
+                        default_size: None, dp(56)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+                        spacing: dp(2)
                 BoxLayout:
                     size_hint: 1, .1
                     Button:

@@ -1,10 +1,17 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import NoTransition
 from kivy.clock import Clock
 from kivy.config import Config
 from kivy.core.window import Window
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.label import Label
+from kivy.properties import BooleanProperty
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
 import pika
 import json
@@ -22,6 +29,7 @@ from figurine import Figurine
 sys.path.append(os.path.abspath("./rfid_reader"))
 from reader import RfidReader
 from audio_list_adapter import AudioListAdapter
+from audio_list import AudioList
 
 if sys.platform.startswith('linux'):
     Config.set('graphics', 'fullscreen', 'auto')
@@ -31,6 +39,35 @@ else:
 
 class Main(FloatLayout):
     pass
+
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
+                                 RecycleBoxLayout):
+    ''' Adds selection and focus behaviour to the view. '''
+
+class SelectableLabel(RecycleDataViewBehavior, BoxLayout):
+    ''' Add selection support to the Label '''
+    index = None
+    selected = BooleanProperty(False)
+    selectable = BooleanProperty(True)
+
+    def refresh_view_attrs(self, rv, index, data):
+        ''' Catch and handle the view changes '''
+        self.index = index
+        return super(SelectableLabel, self).refresh_view_attrs(
+            rv, index, data)
+
+    def on_touch_down(self, touch):
+        ''' Add selection on touch down '''
+        if super(SelectableLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos) and self.selectable:
+            return self.parent.select_with_touch(self.index, touch)
+
+    def apply_selection(self, rv, index, is_selected):
+        ''' Respond to the selection of items in the view. '''
+        self.selected = is_selected
+        if is_selected:
+            rv.set_selection(rv.data[index])
 
 class NightstandApp(App):
     def __init__(self):
@@ -66,8 +103,10 @@ class NightstandApp(App):
         self.main.manager.transition = NoTransition()
         self.main.ids.volume_slider.bind(value=self.on_volume_slider_change)
 
-        self.list_adapter = AudioListAdapter(self.configuration['data_directory'])
-        self.main.ids.audio_list.adapter = self.list_adapter
+        #self.list_adapter = AudioListAdapter(self.configuration['data_directory'])
+        #self.main.ids.audio_list.adapter = self.list_adapter
+        self.main.ids.audio_list.audio_directory = os.path.join(self.configuration['data_directory'], 'audio')
+        self.main.ids.audio_list.show_all()
 
         start_new_thread(self.update_seek_slider, ())
         
@@ -118,7 +157,8 @@ class NightstandApp(App):
                 self.player.resume()
 
     def save_figurine(self):
-        selected_audio_path = self.list_adapter.selection[0].text
+        data = self.main.ids.audio_list.selection
+        selected_audio_path = os.path.join(data['directory'], data['name'])
 
         self.figurine = Figurine(self.current_uid or self.requested_uid, self.configuration['data_directory'])
         self.figurine.save(selected_audio_path)
