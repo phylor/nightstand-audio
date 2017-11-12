@@ -149,13 +149,19 @@ class NightstandApp(App):
                 self.main.ids.play_pause_button.text = 'Pause'
                 self.main.ids.playing_label.text = 'Playing..'
                 self.main.ids.audio_name.text = os.path.basename(self.figurine.get_audio_path())
+                self.main.ids.seek_slider.opacity = 100
+                self.main.ids.seek_time.opacity = 100
             else:
                 if position >= 0.99 * length:
                     self.main.ids.play_pause_button.text = 'Replay'
                     self.main.ids.playing_label.text = ''
+                    self.main.ids.seek_slider.opacity = 0
+                    self.main.ids.seek_time.opacity = 0
                 else:
                     self.main.ids.play_pause_button.text = 'Play'
                     self.main.ids.playing_label.text = ''
+                    self.main.ids.seek_slider.opacity = 100
+                    self.main.ids.seek_time.opacity = 100
 
             time.sleep(1)
 
