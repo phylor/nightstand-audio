@@ -14,7 +14,7 @@ if sys.platform.startswith('linux'):
     class RfidReader():
     
         def __init__(self):
-            self.loops_until_empty = 20
+            self.loops_until_empty = 6
     
             # Hook the SIGINT
             #signal.signal(signal.SIGINT, end_read)
