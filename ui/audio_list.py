@@ -33,7 +33,8 @@ class AudioList(RecycleView):
 
         for json_file in glob.glob(os.path.join(self.data_directory, 'figurines', '*.json')):
             with open(json_file, 'r') as json_data:
-                files.append(json.loads(json_data).audio_path)
+                data = json_data.read()
+                files.append(json.loads(data).audio_path)
 
         return files
 
