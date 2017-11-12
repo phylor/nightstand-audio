@@ -31,3 +31,8 @@ cd ..
 git clone https://github.com/mxgxw/MFRC522-python.git
 
 cp configuration.yaml.sample configuration.yaml
+
+# TODO: add the following lines to ~/.kivy/config.ini to enable touchscreen
+#mouse = mouse
+#mtdev_%(name)s = probesysfs,provider=mtdev
+#hid_%(name)s = probesysfs,provider=hidinput
