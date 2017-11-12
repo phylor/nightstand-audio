@@ -3,6 +3,7 @@ from kivy.uix.recycleview import RecycleView
 import os
 import glob
 import json
+import fnmatch
 
 class AudioList(RecycleView):
     def __init__(self, **kwargs):
@@ -21,7 +22,10 @@ class AudioList(RecycleView):
         audio_files = []
 
         for files in file_types:
-            audio_files.extend(glob.glob(os.path.join(self.audio_directory, '**/' + files)))
+            for root, dirnames, filenames in os.walk(self.audio_directory):
+                for filename in fnmatch.filter(filenames, files):
+                    if not filename.startswith('.'):
+                        audio_files.append(os.path.join(root, filename))
 
         return audio_files
 
