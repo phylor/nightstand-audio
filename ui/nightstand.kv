@@ -16,7 +16,7 @@
         Label:
             text: root.name
         Label:
-            text: root.directory
+            text: root.directory if root.directory != '.' else ''
             font_size: dp(15)
 
 <Main>:
