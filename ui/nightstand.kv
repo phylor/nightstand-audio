@@ -107,11 +107,13 @@
                         font_size: dp(20)
                         state: 'down'
                         on_release: audio_list.show_all()
+                        allow_no_selection: False
                     ToggleButton:
                         text: 'Show unused'
                         group: 'audio_list_filter'
                         font_size: dp(20)
                         on_release: audio_list.show_unused()
+                        allow_no_selection: False
                 AudioList:
                     id: audio_list
                     # Don't specify a size_hint, otherwise scrolling gets messed up
