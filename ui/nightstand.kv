@@ -98,7 +98,7 @@
                 orientation: 'vertical'
                 Label:
                     size_hint: 1, .1
-                    text: 'New figurine, please select audio.'
+                    text: 'New figurine, please select an audio file.'
                 BoxLayout:
                     size_hint: 1, .1
                     ToggleButton:
@@ -114,7 +114,7 @@
                         on_release: audio_list.show_unused()
                 AudioList:
                     id: audio_list
-                    #size_hint: 1, .9
+                    # Don't specify a size_hint, otherwise scrolling gets messed up
                     scroll_type: ['bars', 'content']
                     scroll_wheel_distance: dp(114)
                     bar_width: dp(40)
@@ -127,7 +127,7 @@
                         orientation: 'vertical'
                         spacing: dp(2)
                 BoxLayout:
-                    size_hint: 1, .1
+                    size_hint: 1, .2
                     Button:
                         text: 'Cancel'
                         on_release: _screen_manager.current = 'main'
