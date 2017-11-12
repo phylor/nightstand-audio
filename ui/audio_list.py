@@ -4,6 +4,8 @@ import os
 import glob
 import json
 import fnmatch
+import sys
+import unicodedata
 
 class AudioList(RecycleView):
     def __init__(self, **kwargs):
@@ -22,9 +24,11 @@ class AudioList(RecycleView):
         audio_files = []
 
         for files in file_types:
-            for root, dirnames, filenames in os.walk(unicode(self.audio_directory)):
-                for filename in fnmatch.filter(filenames, unicode(files)):
+            for root, dirnames, filenames in os.walk(self.audio_directory):
+                for filename in fnmatch.filter(filenames, files):
                     if not filename.startswith('.'):
+                        if not sys.platform.startswith('linux'): # OS X workaround
+                            filename = unicodedata.normalize('NFC', unicode(filename, 'utf-8')).encode('utf-8')
                         audio_files.append(os.path.join(root, filename))
 
         return audio_files
