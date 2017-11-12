@@ -148,6 +148,7 @@ class NightstandApp(App):
             if self.player.is_playing():
                 self.main.ids.play_pause_button.text = 'Pause'
                 self.main.ids.playing_label.text = 'Playing..'
+                self.main.ids.audio_name.text = os.path.basename(self.figurine.get_audio_path())
             else:
                 if position >= 0.99 * length:
                     self.main.ids.play_pause_button.text = 'Replay'
@@ -196,6 +197,7 @@ class NightstandApp(App):
                 self.player.resume()
             else:
                 self.figurine = Figurine(uid, self.configuration['data_directory'])
+
 
                 if self.figurine.exists():
                     self.show_playing_screen()

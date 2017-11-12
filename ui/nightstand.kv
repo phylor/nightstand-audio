@@ -61,8 +61,12 @@
                     Button:
                         text: 'Delete'
                         on_release: app.delete_figurine()
+                Label:
+                    id: audio_name
+                    size_hint: 1, .1
+                    text: ''
                 BoxLayout:
-                    size_hint: 1, .8
+                    size_hint: 1, .7
                     Image:
                         source: 'gfx/figurine.png'
                         size: 250, 250
