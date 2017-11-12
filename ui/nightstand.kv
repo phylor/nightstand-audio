@@ -47,18 +47,16 @@
                 orientation: 'vertical'
                 BoxLayout:
                     size_hint: 1, .1
-                    spacing: 15
+                    spacing: dp(10)
                     Slider:
                         id: volume_slider
+                        size_hint: .8, 1
                         range: (0, 100)
                         value: 100
                         step: 5
-                        cursor_size: (100, 100)
+                        cursor_size: (dp(50), dp(50))
                     Button:
-                        id: play_pause_button
-                        text: 'Play / Pause'
-                        on_release: app.toggle_pause()
-                    Button:
+                        size_hint: .2, 1
                         text: 'Delete'
                         on_release: app.delete_figurine()
                 Label:
@@ -77,16 +75,22 @@
                         size: self.texture_size
                 BoxLayout:
                     size_hint: 1, .1
+                    spacing: dp(10)
                     ReleasableSlider:
                         id: seek_slider
-                        size_hint: .9, 1
+                        size_hint: .7, 1
                         range: (0, 1)
                         value: 0
                         step: 0.05
                         on_release: app.seek_to_user()
                         value_track: True
                         value_track_color: [0.15, 0.7, 0.9, 1]
-                        cursor_size: (100, 100)
+                        cursor_size: (dp(50), dp(50))
+                    Button:
+                        id: play_pause_button
+                        size_hint: .2, 1
+                        text: ''
+                        on_release: app.toggle_pause()
                     Label:
                         id: seek_time
                         size_hint: .1, 1
