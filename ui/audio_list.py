@@ -22,8 +22,8 @@ class AudioList(RecycleView):
         audio_files = []
 
         for files in file_types:
-            for root, dirnames, filenames in os.walk(self.audio_directory):
-                for filename in fnmatch.filter(filenames, files):
+            for root, dirnames, filenames in os.walk(unicode(self.audio_directory)):
+                for filename in fnmatch.filter(filenames, unicode(files)):
                     if not filename.startswith('.'):
                         audio_files.append(os.path.join(root, filename))
 
