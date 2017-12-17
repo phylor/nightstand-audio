@@ -26,7 +26,7 @@ if sys.platform.startswith('linux'):
             
         # Capture SIGINT for cleanup when the script is aborted
         def end_read(self, signal, frame):
-            print "Ctrl+C captured, cleaning up.."
+            print("Ctrl+C captured, cleaning up..")
             GPIO.cleanup()
             sys.exit(0)
         
@@ -59,3 +59,12 @@ else:
     class RfidReader(object):
         def read_rfid(self, callback):
             pass
+
+
+if __name__ == '__main__':
+    def test_reading(uid_str, action):
+        print("Found:", uid_str)
+        reader.read_rfid(test_reading)
+
+    reader = RfidReader()
+    reader.read_rfid(test_reading)

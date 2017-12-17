@@ -35,6 +35,16 @@ Start ui:
 python ui/ui.py
 ```
 
+## Troubleshooting
+
+To test the RFID reader:
+
+```
+./rfid_reader/reader.py
+```
+
+If a device has been read, it prints its UID.
+
 Simulate a figurine placed onto the box:
 
 ```
