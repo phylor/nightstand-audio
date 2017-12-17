@@ -13,7 +13,6 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
-import pika
 import json
 from thread import start_new_thread
 import time
