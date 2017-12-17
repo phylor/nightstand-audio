@@ -27,6 +27,12 @@ Music is stored on a USB drive. The USB drive must have the following directory 
 
 Store all audio files in the `audio` directory. Leave the `figurines` directory empty. It is used to match figurines and audio files.
 
+To automount the USB drive, add the following line to your `/etc/fstab`:
+
+```
+/dev/sda1 /mnt vfat rw,uid=1000,gid=1000 0 0
+```
+
 ## Usage
 
 Start ui:
