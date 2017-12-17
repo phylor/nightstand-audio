@@ -15,7 +15,7 @@ sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-
    python-setuptools libgstreamer1.0-dev git-core \
    gstreamer1.0-plugins-{bad,base,good,ugly} \
    gstreamer1.0-{omx,alsa} python-dev libmtdev-dev \
-   xclip
+   xclip python-pip
 sudo pip install -U Cython==0.27.3
 sudo pip install git+https://github.com/kivy/kivy.git@master
 
