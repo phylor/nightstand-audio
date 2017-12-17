@@ -221,6 +221,10 @@ class NightstandApp(App):
     def check_rfid_reader(self, delta_time):
         self.reader.read_rfid(self.message_received)
 
+    def shutdown(self):
+        os.system('sudo poweroff')
+        App.get_running_app().stop()
+
 if __name__ == '__main__':
     app = NightstandApp()
 
