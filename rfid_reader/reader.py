@@ -14,21 +14,14 @@ if sys.platform.startswith('linux'):
     class RfidReader():
     
         def __init__(self):
+            GPIO.cleanup()
+
             self.loops_until_empty = 6
-    
-            # Hook the SIGINT
-            #signal.signal(signal.SIGINT, end_read)
-            
+
             self.MIFAREReader = MFRC522.MFRC522()
             
             self.last_uid = ''
             self.loops = 0
-            
-        # Capture SIGINT for cleanup when the script is aborted
-        def end_read(self, signal, frame):
-            print("Ctrl+C captured, cleaning up..")
-            GPIO.cleanup()
-            sys.exit(0)
         
         def read_rfid(self, callback):
             self.loops = self.loops + 1
