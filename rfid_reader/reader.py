@@ -62,9 +62,15 @@ else:
 
 
 if __name__ == '__main__':
+    reader = RfidReader()
+
+    def reading():
+        while True:
+            reader.read_rfid(test_reading)
+
     def test_reading(uid_str, action):
         print("Found:", uid_str)
-        reader.read_rfid(test_reading)
 
-    reader = RfidReader()
-    reader.read_rfid(test_reading)
+    import thread
+
+    thread.start_new_thread(reading, ())
