@@ -41,6 +41,14 @@ Start ui:
 python ui/ui.py
 ```
 
+To automatically start the application when starting the Raspberry Pi, activate `autologin to console` in `Boot Options` when running `sudo raspi-config`. Then add the following to the end of `.bashrc` of the `pi` user:
+
+```
+if [ $(tty) == '/dev/tty1' ]; then
+  cd nightstand-audio
+  python ui/ui.py
+fi
+
 ## Troubleshooting
 
 To test the RFID reader:
@@ -58,7 +66,7 @@ Simulate a figurine placed onto the box:
 
 ## Start/Shutdown button
 
-Connect a momentary switch to pins 5 and 6.
+Connect a momentary switch to pins 5 and 25. Note that when using the official Raspberry Pi Touchscreen pin 5 is already used. You can hook the button as well as the touchscreen both to pin 5 though (e.g. use a jumper bridge).
 
     curl https://pie.8bitjunkie.net/shutdown/setup-shutdown.sh | bash
 
