@@ -48,6 +48,7 @@ if [ $(tty) == '/dev/tty1' ]; then
   cd nightstand-audio
   python ui/ui.py
 fi
+```
 
 ## Troubleshooting
 
